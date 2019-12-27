@@ -1,6 +1,9 @@
 """Login Viewset."""
 import requests
+<<<<<<< HEAD
 
+=======
+>>>>>>> e734bc38c89f7350ab0bec46e6506728c9cc98de
 from django.conf import settings
 from django.contrib.auth import logout
 from django.utils import timezone

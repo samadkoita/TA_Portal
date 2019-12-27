@@ -2,7 +2,7 @@
 import requests
 from django.conf import settings
 from django.contrib.auth.models import User
-from student_faculty.models import StudentUser
+from student_faculty.models import StudentUser,FacultyUser
 from django.contrib.auth import login
 from django.db.models import Q
 from rest_framework.response import Response
