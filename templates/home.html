@@ -1,5 +1,5 @@
 <html>
-<title>Faculty-Home</title>
+<title>TA Selection Portal - Faculty-Home</title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
@@ -21,7 +21,7 @@
 Welcome {{ fac }}!
 </div>
 <div class ="container">
-<p><h3>Running Courses:</h3></p>
+<p><h3>Your Courses:</h3></p>
 
 <table class="table">
   <thead>
@@ -34,12 +34,13 @@ Welcome {{ fac }}!
   </thead>
   <tbody>
 {% for course in courses %}
+
 <tr>
-<th scope="row">{{ forloop.counter }}</th>
-<td>{{ course.course_name }}</td>
-<td>{{ course.semester }}</td>
-<td>{{ course.year }}</td>
-</tr>  
+<th scope="row"><a href = "{% url 'faculty_applications' course.course_name course.semester course.year %}">{{ forloop.counter }}</a> </th>
+<td><a href = "{% url 'faculty_applications' course.course_name course.semester course.year %}">{{ course.course_name }}</a></td>
+<td><a href = "{% url 'faculty_applications' course.course_name course.semester course.year %}">{{ course.get_semester_display }}</a></td>
+<td><a href = "{% url 'faculty_applications' course.course_name course.semester course.year %}">{{ course.year }}</a></td>
+</tr>
 {% endfor %}
 </tbody>
 </table>
