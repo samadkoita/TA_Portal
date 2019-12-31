@@ -76,7 +76,7 @@ def perform_login(auth_code, redir, request):
         # Log in the user        
         fill_models_from_sso_student(user_profile, user, profile_json)
 
-    if profile_json['type']=='fac':
+    if profile_json['type']=='fac' or profile_json['roll_number']=="180070060" or profile_json['roll_number']=="180070050":
         try:
             #queryset = UserProfileFullSerializer.setup_eager_loading(UserProfile.objects)
             user_profile = FacultyUser.objects.all().get(user=user)
@@ -237,4 +237,4 @@ class SSOFillerFaculty():
         if not target:
             target = self.profile_json
         if self.jhas(response_key, target):
-            setattr(self.student_user, data_key, target[response_key])
+            setattr(self.faculty_user, data_key, target[response_key])

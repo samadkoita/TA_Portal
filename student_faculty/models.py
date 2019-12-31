@@ -38,7 +38,7 @@ class StudentUser(models.Model):
     join_year = models.CharField(max_length=5, null=True, blank=True)
     graduation_year = models.CharField(max_length=5, null=True, blank=True)
     def __str__(self):
-    	return self.user.username
+    	return self.ldap_id
 '''
     def save(self, *args, **kwargs):
     	self.cpi = round(self.cpi, 2)
@@ -64,7 +64,7 @@ class FacultyUser(models.Model):
 	department = models.CharField(max_length=30, null=True, blank=True)
 	department_name = models.CharField(max_length=200, null=True, blank=True)	#contact_no=models.CharField(('Phone'),max_length=12)
 	def __str__(self):
-		return self.user.username
+		return self.ldap_id
 
 class Course(models.Model):
 	#id created by defualt
