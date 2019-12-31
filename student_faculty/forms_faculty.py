@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Course
+from student_faculty.models import Course,FacultyUser,Application
 
 class PostForm_NewCouse(forms.ModelForm):
 
@@ -19,3 +19,10 @@ class PostForm_NewCouse(forms.ModelForm):
 	    year=models.IntegerField(blank=False)
 	    semester=models.PositiveSmallIntegerField(blank=False,choices=SEM_OPTIONS)
         '''
+
+
+from django.views.generic.edit import UpdateView
+
+# class PostForm_EditCourse(UpdateView):
+#     model = Course
+#     fields = ('course_name','course_details','profs','eligibility_criteria','department','deadline','duration','extra_questions','year','semester')

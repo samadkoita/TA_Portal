@@ -7,9 +7,9 @@ urlpatterns = [
     #Enlist faculty web pages
 
 
-    path("faculty/home",vf.home,name = "faculty_home"),
-    path("faculty/addcourse",vf.addcourse,name = "faculty_addcourse"),
-    
+    path("faculty/home/",vf.home,name = "faculty_home"),
+    path("faculty/addcourse/",vf.addcourse,name = "faculty_addcourse"),
+    path("faculty/<cn>/<sem>/<ye>/",vf.ListApplicants,name ="faculty_applications")
     
     #Enlist student web pages
 

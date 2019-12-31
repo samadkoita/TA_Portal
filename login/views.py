@@ -10,6 +10,7 @@ from login.helpers import perform_login
 #from users.serializer_full import UserProfileFullSerializer
 from django.http import HttpResponse
 import datetime
+from django.shortcuts import redirect
 
 class LoginViewSet(viewsets.ViewSet):
     """Login"""
@@ -35,7 +36,7 @@ class LoginViewSet(viewsets.ViewSet):
 
         now = datetime.datetime.now()
         html = "<html><body>It is now %s.</body></html>" % now
-        return HttpResponse(html)
+        return redirect('faculty_home')
 
     @staticmethod
     def logout(request):
