@@ -82,19 +82,23 @@ def ListApplicants(request,cn,sem,ye):
 
 
     
-def editCourse(request,cn,sem,ye):
-    if not request.user.is_authenticated:
-        return redirect('home')
-    faculty_object = ""
-    try:
-        faculty_object = models.FacultyUser.objects.get(user = request.user)
-    except:
-        return HttpResponse("Error -> Not a faculty")
-    course = ""
-    try:
-        course = models.Course.objects.get(course_name = cn, semester = sem, year = ye, profs = faculty_object)
-    except:
-        return HttpResponse("Error - > No such Course" + cn+" "+ sem + " " + ye)
-    form = forms_faculty.PostForm_EditCourse(request.POST or None, instance=course)
+# def editCourse(request,cn,sem,ye):
+#     if not request.user.is_authenticated:
+#         return redirect('home')
+#     faculty_object = ""
+#     try:
+#         faculty_object = models.FacultyUser.objects.get(user = request.user)
+#     except:
+#         return HttpResponse("Error -> Not a faculty")
+#     course = ""
+#     try:
+#         course = models.Course.objects.get(course_name = cn, semester = sem, year = ye, profs = faculty_object)
+#     except:
+#         return HttpResponse("Error - > No such Course" + cn+" "+ sem + " " + ye)
+#     form = forms_faculty.PostForm_EditCourse(request.POST or None, instance=course)
+#     if form.is_valid():
+#         form.save()
+#         return redirect('faculty_home')
+    
 
     
