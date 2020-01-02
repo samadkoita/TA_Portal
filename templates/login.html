@@ -8,33 +8,8 @@
 
 <div class = "container" style = 'text-align:center'>
    <h2>Teaching Assistants Selection Portal</h2>
-   <div id="sso-root"></div>
-   <!--
-       <a href = "https://gymkhana.iitb.ac.in/sso/oauth/authorize/?client_id=z3E7yusTYcwJVy1o3AsFVro2EC18ntwAnBEIJLM4&response_type=code&scope=basic%20profile%20ldap%20sex%20phone%20insti_address%20program%20secondary_emails%20send_mail&redirect_uri=http://127.0.0.1:8000/login" role="button" class="btn btn-primary">Login using SSO</button>
-       -->
-    </div>
 
-<script type="application/javascript">
-
-    new SSO_JS({
-        config: {
-            client_id: 'z3E7yusTYcwJVy1o3AsFVro2EC18ntwAnBEIJLM4', 
-            scope: ['basic', 'profile', 'ldap', 'sex', 'phone', 'insti_address', 'program', 'secondary_emails', 'send_mail'],
-            state: '', // Optional. Default None
-            response_type: 'code',  
-            redirect_uri: 'http://127.0.0.1:8000/login',
-            new_window: 'false',
-            sso_root: document.getElementById('sso-root'),
-            /* Optional
-             document.getElementById don't work if your element is not in light DOM. In that case you need to
-             provide selector here. In most of the cases this will work.
-             */
-        },
-        colors: { // All Optional
-            button_div_bg_color: '303F9F', // Background color of button
-            button_anchor_color: 'FFFFFF', // Font color of Button
-            logout_anchor_color: '727272', // Font color of logout mark (The one with 'Login as other user'
-        },
-    }).init();
-
-</script>
+    <a href = "https://gymkhana.iitb.ac.in/sso/oauth/authorize/?client_id=z3E7yusTYcwJVy1o3AsFVro2EC18ntwAnBEIJLM4&response_type=code&scope=basic%20profile%20ldap%20sex%20phone%20insti_address%20program%20secondary_emails%20send_mail&redirect_uri=http://127.0.0.1:8000/login" role="button" class="btn btn-primary">Login using SSO
+</a>
+</div>
+</html>
