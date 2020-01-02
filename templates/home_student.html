@@ -23,6 +23,7 @@
 <h2>Welcome {{ student.ldap_id }}!</h2>
 <br>
 <h3>Personal Details</h3>
+<br>
 <table class="table table-striped">
     <tbody>
     <tr>
@@ -58,9 +59,16 @@
         
     </tbody>
   </table>
+{% if not student.cpi %}
+<h6 style="color:red">Enter your CPI and Year of Study by clicking on Edit Academic Details button</H6>
+  <br>
+<h5 style="color:red">Warning! Not doing so will not let you apply for any course</H5>
 
+{% endif %}
+
+<br>
 <a class="btn btn-primary" href="{% url 'edit_details' %}" role="button">Edit Academic Details</a>
-<a class="btn btn-primary" href="https://gymkhana.iitb.ac.in/sso/user/" role="button">Edit Personal Details</a>
+<a class="btn btn-primary" href="https://gymkhana.iitb.ac.in/sso/user/" role="button" target="_blank">Edit Personal Details</a>
 
 
   <!-- Please add the body for
