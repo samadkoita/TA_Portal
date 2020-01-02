@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'student_faculty.apps.StudentFacultyConfig',
     'login.apps.LoginConfig',
+    'widget_tweaks',
 ]
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -67,7 +69,9 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
         },
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
     },
+    
 ]
 
 WSGI_APPLICATION = 'ta_portal.wsgi.application'

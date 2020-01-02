@@ -38,7 +38,7 @@ class StudentUser(models.Model):
     join_year = models.CharField(max_length=5, null=True, blank=True)
     graduation_year = models.CharField(max_length=5, null=True, blank=True)
     def __str__(self):
-    	return self.user.username
+    	return self.ldap_id
 '''
     def save(self, *args, **kwargs):
     	self.cpi = round(self.cpi, 2)
@@ -64,41 +64,41 @@ class FacultyUser(models.Model):
 	department = models.CharField(max_length=30, null=True, blank=True)
 	department_name = models.CharField(max_length=200, null=True, blank=True)	#contact_no=models.CharField(('Phone'),max_length=12)
 	def __str__(self):
-		return self.user.username
+		return self.ldap_id
 
 class Course(models.Model):
 	#id created by defualt
 	class Meta:
 		unique_together=(('course_name','year','semester'),)
+		db_table="Courses"
 
 	course_name=models.CharField(('Course Name'),max_length=40)
 	profs=models.ManyToManyField(FacultyUser)
 	course_details=models.CharField(('Course Details'),max_length=1000,blank=True)
 	eligibility_criteria=models.CharField(('Eligibility'),max_length=500,blank=True)
-	department = models.CharField(max_length=30, null=True, blank=True)
+	department = models.CharField(max_length=30, null=True, blank=True,choices=DEPT_CHOICES)
 	department_name = models.CharField(max_length=200, null=True, blank=True)
 	deadline=models.DateField(default=date.today()+timedelta(days=7),blank=False,)
 	duration=models.CharField(default='Full Semester',choices=DURATION_CHOICES,max_length=20)
 	extra_questions=models.CharField(max_length=1500)
 	year=models.IntegerField(blank=False)
 	semester=models.PositiveSmallIntegerField(blank=False,choices=SEM_OPTIONS)
-	pass
 
 class Application(models.Model):
+	class Meta:
+		unique_together=(('course','student'),)
+		db_table="Applications"
 	course=models.ForeignKey(Course,on_delete=models.CASCADE)
 	student=models.ForeignKey(StudentUser,on_delete=models.CASCADE)
 	status=models.CharField(max_length=100,choices=STUDENT_STATUS,default='On Hold')
-	grade=models.CharField(('Grade'),max_length=2)
+	grade=models.PositiveSmallIntegerField(('Grade'),choices=GRADE)
 	answers_to_questions=models.CharField(('Answers'),max_length=6000)
 	# to be used only is status is waitlist
-	waitlist_num=models.IntegerField(('Waitlist Number'))
+	waitlist_num=models.IntegerField(('Waitlist Number'),blank=True,null=True)
 	created_or_modified=models.DateTimeField(('Last Modified'),auto_now=True)
-
-	pass
 
 #This will store the 
 class StudentFeedback(models.Model):
-
 	course=models.ForeignKey(Course,on_delete=models.CASCADE,related_name='student_feedback_course')
 	student=models.ForeignKey(StudentUser,on_delete=models.CASCADE,related_name='student_feedback_student')
 	#replace field with actual attributes to put

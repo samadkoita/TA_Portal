@@ -2,7 +2,7 @@
 import requests
 from django.conf import settings
 from django.contrib.auth.models import User
-from student_faculty.models import StudentUser
+from student_faculty.models import StudentUser,FacultyUser
 from django.contrib.auth import login
 from django.db.models import Q
 from rest_framework.response import Response
@@ -66,7 +66,8 @@ def perform_login(auth_code, redir, request):
     if not user:
         user = User.objects.create_user(username)
 
-    if profile_json['type']=='ug' or profile_json['type']=='pg' or profile_json['type']=='dd':
+    if (profile_json['type']=='ug' or profile_json['type']=='pg' or profile_json['type']=='dd') and profile_json['roll_number']!="180070050":
+        print("STUDENT")
         try:
             #queryset = UserProfileFullSerializer.setup_eager_loading(UserProfile.objects)
             user_profile = StudentUser.objects.all().get(user=user)
@@ -76,7 +77,8 @@ def perform_login(auth_code, redir, request):
         # Log in the user        
         fill_models_from_sso_student(user_profile, user, profile_json)
 
-    if profile_json['type']=='fac':
+    if profile_json['type']=='fac'  or profile_json['roll_number']=="180070050":
+        print("FACULTY")
         try:
             #queryset = UserProfileFullSerializer.setup_eager_loading(UserProfile.objects)
             user_profile = FacultyUser.objects.all().get(user=user)
@@ -92,7 +94,6 @@ def perform_login(auth_code, redir, request):
     request.session.save()
     print("Smooth Login")
     # Return the session id
-    print("USR_PRFL", user_profile)
     return Response({
         'sessionid': request.session.session_key,
         'user': user.username,
@@ -238,4 +239,4 @@ class SSOFillerFaculty():
         if not target:
             target = self.profile_json
         if self.jhas(response_key, target):
-            setattr(self.student_user, data_key, target[response_key])
+            setattr(self.faculty_user, data_key, target[response_key])

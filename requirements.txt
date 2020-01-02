@@ -1,0 +1,5 @@
+django
+django-cripsy-forms
+requests
+djangorestframework
+django-widget-tweaks

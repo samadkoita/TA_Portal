@@ -3,6 +3,7 @@ import requests
 from django.conf import settings
 from django.contrib.auth import logout
 from django.utils import timezone
+from student_faculty.models import StudentUser,FacultyUser
 from rest_framework import viewsets
 from rest_framework.response import Response
 from login.helpers import perform_login
@@ -10,9 +11,13 @@ from login.helpers import perform_login
 #from users.serializer_full import UserProfileFullSerializer
 from django.http import HttpResponse
 import datetime
+from django.shortcuts import redirect,render
 
 class LoginViewSet(viewsets.ViewSet):
     """Login"""
+    @staticmethod
+    def prelogin(request):
+        return render(request,"login.html")
 
     @staticmethod
     def login(request):
@@ -32,7 +37,15 @@ class LoginViewSet(viewsets.ViewSet):
             return Response({"message": "{?redir} is required"}, status=400)
 
         perform_login(auth_code, redir, request)
-
+        try:
+            faculty_object = FacultyUser.objects.get(user = request.user)
+            return redirect('faculty_home')
+        except FacultyUser.DoesNotExist:
+            try:
+                student_object=StudentUser.objects.get(user=request.user)
+                return redirect('student_profile')
+            except StudentUser.DoesNotExist:
+                return redirect('home')
         now = datetime.datetime.now()
         html = "<html><body>It is now %s.</body></html>" % now
         return HttpResponse(html)
@@ -43,7 +56,7 @@ class LoginViewSet(viewsets.ViewSet):
 
         logout(request)
         #return Response({'message': 'logged out'})
-        return Response({'message': 'logged out'})
+        return redirect('home')
 
 
     # @staticmethod
