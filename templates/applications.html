@@ -12,7 +12,7 @@
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
       <a class="nav-item nav-link active" href="{% url 'faculty_home' %}">Home<span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link" href="{% url 'faculty_home' %}">Add a Course</a>
+      <a class="nav-item nav-link" href="{% url 'faculty_addcourse' %}">Add a Course</a>
       <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a> 
     </div>
   </div>
@@ -46,7 +46,7 @@
 <td>{{ application.get_grade_display }}</td>
 <td>{{ application.status }}</td>
 <td>{{ application.waitlist_num }}</td>
-<td><a href=#>{{ application.waitlist_num }}</a></td>
+<td><a href="{% url 'faculty_student_profile' course.course_name course.semester course.year application.student.ldap_id %}">Application</a></td>
 
 </tr>
 {% endfor %}

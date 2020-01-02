@@ -26,3 +26,9 @@ from django.views.generic.edit import UpdateView
 class PostForm_EditCourse(UpdateView):
     model = Course
     fields = ('course_name','course_details','profs','eligibility_criteria','department','deadline','duration','extra_questions','year','semester')
+
+class Application(forms.ModelForm):
+
+    class Meta:
+        model = Application
+        fields = ['status','waitlist_num']

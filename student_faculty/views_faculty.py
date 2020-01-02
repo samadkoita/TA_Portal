@@ -95,10 +95,57 @@ def editCourse(request,cn,sem,ye):
         course = models.Course.objects.get(course_name = cn, semester = sem, year = ye, profs = faculty_object)
     except:
         return HttpResponse("Error - > No such Course" + cn+" "+ sem + " " + ye)
-    form = forms_faculty.PostForm_EditCourse(request.POST or None, instance=course)
-    if form.is_valid():
-        form.save()
-        return redirect('faculty_home')
+    if request.method == "POST":
+        form = forms_faculty.PostForm_NewCouse(request.POST,instance = course)
+        if form.is_valid():
+            post = form.save()
+            post.author = request.user
+            post.published_date = timezone.now()
+            post.save()
+            return redirect('faculty_home')
+    else:
+        form = forms_faculty.PostForm_NewCouse(instance = course)
     
 
+def student_profile(request,cn,sem,ye,ldap_stud):
+    if not request.user.is_authenticated:
+        return redirect('home')
+    faculty_object = ""
+    try:
+        faculty_object = models.FacultyUser.objects.get(user = request.user)
+        print("Got faculty object.")
+    except:
+        return HttpResponse("Error -> Not a faculty member")
+    course = ""
+    try:
+        course = models.Course.objects.get(course_name = cn, semester = sem, year = ye, profs = faculty_object)
+        print("Got faculty object.")
+    except:
+        return HttpResponse("Error - > No such Course " + cn+" "+ sem + " " + ye)
+    try:
+        student_object = models.StudentUser.objects.get(ldap_id = ldap_stud)
+        print("Got student object.")
+
+    except:
+        return HttpResponse("Error -> No Such Student")
     
+    
+    try:
+        application = models.Application.objects.get(course = course,student = student_object)
+        print("got application object")
+    except:
+        return HttpResponse("Error -> No such student has filled up the form")
+
+    if request.method == "POST":
+        form = forms_faculty.Application(request.POST,instance = application)
+        if form.is_valid():
+            post = form.save()
+            post.save()
+            return redirect('faculty_applications',cn = cn,sem = sem, ye = ye)
+    else:
+        form = forms_faculty.Application(instance = application)
+        form.fields['waitlist_num'].label = "Waitlist number. Please fill this only if you are waitlisting someone"
+
+
+    
+    return render(request,'student_profile.html',{'student':student_object,'course':course,'application':application,'form':form})

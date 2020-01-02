@@ -66,7 +66,7 @@ def perform_login(auth_code, redir, request):
     if not user:
         user = User.objects.create_user(username)
 
-    if (profile_json['type']=='ug' or profile_json['type']=='pg' or profile_json['type']=='dd') and profile_json['roll_number']!="180070050":
+    if (profile_json['type']=='ug' or profile_json['type']=='pg' or profile_json['type']=='dd') and (profile_json['roll_number']!="180070050" and profile_json['roll_number']!="180070060"):
         print("STUDENT")
         try:
             #queryset = UserProfileFullSerializer.setup_eager_loading(UserProfile.objects)
@@ -77,7 +77,7 @@ def perform_login(auth_code, redir, request):
         # Log in the user        
         fill_models_from_sso_student(user_profile, user, profile_json)
 
-    if profile_json['type']=='fac'  or profile_json['roll_number']=="180070050":
+    if profile_json['type']=='fac'  or profile_json['roll_number']=="180070050" or profile_json['roll_number']=="180070060":
         print("FACULTY")
         try:
             #queryset = UserProfileFullSerializer.setup_eager_loading(UserProfile.objects)
