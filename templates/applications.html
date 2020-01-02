@@ -70,7 +70,32 @@
 </tbody>
 </table>
 </div>
-</form>
+<div class="container" style = "text-align:center">
+  {% if accepted != "" %}
+  <p>
+  <a href = "mailto:{{ accepted }}?subject=Letter of Rejection as a teaching assistant for {{ course.course_name }}" role="button" class="btn btn-primary">Send emails to Accepted</a>
+</p>
+{% endif %}
+{% if rejected != "" %}
+<p>  
+<a href = "mailto:{{ rejected }}?subject=Letter of Rejection as a teaching assistant for {{ course.course_name }}" role="button?" class="btn btn-primary">Send emails to Rejected</a>
+</p>
+{% endif %}
+{% if hold != "" %}
+<p>
+<a href = "mailto:{{ hold }}" role="button" class="btn btn-primary">Send emails to Waitlisted</a>
+</p>
+{% endif %}
+{% if waitlist != "" %}
+<p>
+<a href = "mailto:{{ waitlist }}?subject=Waitlisted as a teaching assistant for {{ course.course_name }}" role="button" class="btn btn-primary">Send emails to those on hold
+</a>
+</p>
+{% endif %}
+
+</div>
+
+
 <script>
 
 function sortTable(n) {                                         // n is the column number which we want to sort
@@ -111,4 +136,4 @@ function sortTable(n) {                                         // n is the colu
 }
 
 </script>
-</script>
+</html>

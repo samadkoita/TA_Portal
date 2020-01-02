@@ -76,8 +76,40 @@ def ListApplicants(request,cn,sem,ye):
     
 
     applications = models.Application.objects.filter(course = course)
+    emails_accepted_array = models.Application.objects.values_list('student__ldap_id',flat = True).filter(course = course, status = "Accepted")
+    emails_accepted =""
+    for i in emails_accepted_array:
+        emails_accepted+=i+"@iitb.ac.in,"
 
-    return render(request,'applications.html',{'applications':applications,'course':course})
+    if emails_accepted!="":
+        emails_accepted = emails_accepted[:-1]
+    
+    emails_rejected_array = models.Application.objects.values_list('student__ldap_id',flat = True).filter(course = course, status = "Rejected")
+    emails_rejected =""
+    for i in emails_rejected_array:
+        emails_rejected+=i+"@iitb.ac.in,"
+
+    if emails_rejected!="":
+        emails_rejected = emails_rejected[:-1]
+    
+    emails_on_hold_array = models.Application.objects.values_list('student__ldap_id',flat = True).filter(course = course, status = "On Hold")
+    emails_on_hold =""
+    for i in emails_on_hold_array:
+        emails_on_hold+=i+"@iitb.ac.in,"
+
+    if emails_on_hold!="":
+        emails_on_hold = emails_on_hold[:-1]
+    
+    emails_waitlist_array = models.Application.objects.values_list('student__ldap_id',flat = True).filter(course = course, status = "Waitlist")
+    emails_waitlist =""
+    for i in emails_waitlist_array:
+        emails_waitlist+=i+"@iitb.ac.in,"
+
+    if emails_waitlist!="":
+        emails_waitlist = emails_waitlist[:-1]
+    
+
+    return render(request,'applications.html',{'applications':applications,'course':course,'accepted':emails_accepted,'rejected':emails_rejected,'hold':emails_on_hold,'waitlist':emails_waitlist})
 
 
 
