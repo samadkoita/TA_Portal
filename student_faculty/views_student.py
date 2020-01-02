@@ -8,17 +8,7 @@ from django import forms
 from student_faculty import forms_student
 import datetime
 
-def homepage(request):
-    if not request.user.is_authenticated:
-        return redirect('home')
-    student_object = ""
-    try:
-        student_object = models.StudentUser.objects.get(user = request.user)
-    except:
-        return HttpResponse("Error-> No such student")
-
-    return render(request,'home_student.html',{'student':student_object})
-
+#Done by Samad
 class CourseList(ListView):
 	template_name="course_list.html"
 	model=Course
@@ -35,9 +25,8 @@ class ApplicationList(ListView):
 			student_object = models.StudentUser.objects.get(user=request.user)
 		except:
 			return HttpResponse("Error-> No such student")
-		self.queryset=Application.objects.filter()
+		self.queryset=Application.objects.filter(course__deadline__gte=datetime.date.today(),student = student_object)
 		return super(ApplicationList,self).get(request,*args,**kwargs)
-
 
 #Done By Karan
 
@@ -60,6 +49,19 @@ def editdetails(request):
     return render(request, 'editdetails.html', {'form': form})
 
 #Done By Sumanyu
+def homepage(request):
+    if not request.user.is_authenticated:
+        return redirect('home')
+    student_object = ""
+    try:
+        student_object = models.StudentUser.objects.get(user = request.user)
+    except:
+        return HttpResponse("Error-> No such student")
+
+    return render(request,'home_student.html',{'student':student_object})
+
+
+
 def applications(request,cn,sem,ye):
     if not request.user.is_authenticated:
         return redirect('home')
@@ -73,7 +75,8 @@ def applications(request,cn,sem,ye):
         course = models.Course.objects.get(course_name = cn,semester = sem,year = ye)
     except:
         return HttpResponse("Error")
-    
+    if course.deadline<datetime.date.today():
+        return HttpResponse("Error. You are late!")
     try:
         application = models.Application.objects.get(student = student_object,course = course)
         if request.method == "POST":

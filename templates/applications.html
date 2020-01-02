@@ -23,16 +23,17 @@
 <div class ="container">
 <p><h3>Applications for {{ course.course_name }}</h3></p>
 
-<table class="table">
+<table class="table" id="application">
   <thead>
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">Student Name</th>
-      <th scope="col">CPI</th>
-      <th scope="col">Grade</th>
-      <th scope="col">Status</th>
+      <th scope="col" onclick="sortTable(0)">#</th>
+      <th scope="col" onclick="sortTable(1)">Student Name</th>
+      <th scope="col" onclick="sortTable(2)">CPI</th>
+      <th scope="col" onclick="sortTable(3)">Grade</th>
+      <th scope="col" onclick="sortTable(4)">Status</th>
       <th scope="col">Waitlist No.</th>
       <th scope="col">View Application</th>
+      <th scope="col">Send Email</th>
 
     </tr>
   </thead>
@@ -47,11 +48,67 @@
 <td>{{ application.status }}</td>
 <td>{{ application.waitlist_num }}</td>
 <td><a href="{% url 'faculty_student_profile' course.course_name course.semester course.year application.student.ldap_id %}">Application</a></td>
-
+<td>
+{% if application.status == "Accepted" %}
+<a href = "mailto:{{ application.student.ldap_id }}@iitb.ac.in?subject=Letter of Acceptance as a teaching assistant for {{ course.course_name }}">Email</a>
+{% endif %}
+{% if application.status == "Rejected" %}
+<a href = "mailto:{{ application.student.ldap_id }}@iitb.ac.in?subject=Letter of Rejection as a teaching assistant for {{ course.course_name }}">Email</a>
+{% endif %}
+{% if application.status == "Waitlist" %}
+<a href = "mailto:{{ application.student.ldap_id }}@iitb.ac.in?subject=Waitlisted as a teaching assistant for {{ course.course_name }}">Email</a>
+{% endif %}
+{% if application.status == "On Hold" %}
+<a href = "mailto:{{ application.student.ldap_id }}@iitb.ac.in">Email</a>
+{% endif %}
+<!--
+  STUDENT_STATUS=(('Accepted','Accepted'),('Waitlist','Waitlist'),('Rejected','Rejected'),('On Hold','On Hold'))
+-->
+</td>
 </tr>
 {% endfor %}
 </tbody>
 </table>
 </div>
 </form>
-</div>
+<script>
+
+function sortTable(n) {                                         // n is the column number which we want to sort
+  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  table = document.getElementById("application");                // Change name of table accordingly
+  switching = true;
+  dir = "desc";
+  while (switching) {
+    switching = false;
+    rows = table.rows;
+    for (i = 1; i < (rows.length - 1); i++) {
+      shouldSwitch = false;
+      x = rows[i].getElementsByTagName("TD")[n];                // Change to whatever is id of table data
+      y = rows[i + 1].getElementsByTagName("TD")[n];
+      if (dir == "asc") {
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          shouldSwitch = true;
+          break;
+        }
+      } else if (dir == "desc") {
+        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+          shouldSwitch = true;
+          break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      switchcount ++;
+    } else {
+      if (switchcount == 0 && dir == "asc") {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+}
+
+</script>
+</script>
