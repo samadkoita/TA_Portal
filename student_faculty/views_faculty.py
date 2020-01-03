@@ -20,7 +20,7 @@ def home(request):
     try:
         faculty_object = models.FacultyUser.objects.get(user = request.user)
     except:
-        return HttpResponse("Error")
+        return render(request,'error_authentication.html',{'error':"You must be a faculty to access this page"})
     faculty = faculty_object.ldap_id
     courses = models.Course.objects.filter(profs__ldap_id = faculty_object.ldap_id)
     # #Tester Code
@@ -42,7 +42,7 @@ def addcourse(request):
     try:
         faculty_object = models.FacultyUser.objects.get(user = request.user)
     except:
-        return HttpResponse("Error")
+        return render(request,'error_authentication.html',{'error':"You must be a faculty to access this page"})
 
     if request.method == "POST":
         form = forms_faculty.PostForm_NewCouse(request.POST)
@@ -67,12 +67,12 @@ def ListApplicants(request,cn,sem,ye):
     try:
         faculty_object = models.FacultyUser.objects.get(user = request.user)
     except:
-        return HttpResponse("Error -> Not a faculty")
+        return render(request,'error_authentication.html',{'error':"You must be a faculty to access this page"})
     course = ""
     try:
         course = models.Course.objects.get(course_name = cn, semester = sem, year = ye, profs = faculty_object)
     except:
-        return HttpResponse("Error - > No such Course" + cn+" "+ sem + " " + ye)
+        return render(request,'error_faculty.html',{'fac':faculty_object ,'error':"Please enter a valid course URL"})
     
 
     applications = models.Application.objects.filter(course = course)
@@ -121,7 +121,7 @@ def editCourse(request,cn,sem,ye):
     try:
         faculty_object = models.FacultyUser.objects.get(user = request.user)
     except:
-        return HttpResponse("Error -> Not a faculty member")
+        return render(request,'error_authentication.html',{'error':"You must be a faculty to access this page"})
     course = ""
     try:
         course = models.Course.objects.get(course_name = cn, semester = sem, year = ye, profs = faculty_object)
@@ -147,26 +147,26 @@ def student_profile(request,cn,sem,ye,ldap_stud):
         faculty_object = models.FacultyUser.objects.get(user = request.user)
         print("Got faculty object.")
     except:
-        return HttpResponse("Error -> Not a faculty member")
+        return render(request,'error_authentication.html',{'error':"You must be a faculty to access this page"})
     course = ""
     try:
         course = models.Course.objects.get(course_name = cn, semester = sem, year = ye, profs = faculty_object)
         print("Got faculty object.")
     except:
-        return HttpResponse("Error - > No such Course " + cn+" "+ sem + " " + ye)
+        return render(request,'error_faculty.html',{'fac':faculty_object ,'error':"No such Course " + cn+" "+ sem + " " + ye+"\nPlease enter a valid course URL"})
     try:
         student_object = models.StudentUser.objects.get(ldap_id = ldap_stud)
         print("Got student object.")
 
     except:
-        return HttpResponse("Error -> No Such Student")
+        return render(request,'error_faculty.html',{'fac':faculty_object ,'error':"No such student"})
     
     
     try:
         application = models.Application.objects.get(course = course,student = student_object)
         print("got application object")
     except:
-        return HttpResponse("Error -> No such student has filled up the form")
+        return render(request,'error_faculty.html',{'fac':faculty_object ,'error':"No such student application"})
 
     if request.method == "POST":
         form = forms_faculty.Application(request.POST,instance = application)
