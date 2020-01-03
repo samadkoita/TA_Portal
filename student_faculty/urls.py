@@ -10,6 +10,7 @@ urlpatterns = [
     path("faculty/home/",vf.home,name = "faculty_home"),
     path("faculty/addcourse/",vf.addcourse,name = "faculty_addcourse"),
     path("faculty/<cn>/<sem>/<ye>/",vf.ListApplicants,name ="faculty_applications"),
+    path("faculty/<cn>/<sem>/<ye>/editcourse",vf.editCourse,name = "faculty_editCourse"),
     path("faculty/<cn>/<sem>/<ye>/<ldap_stud>/",vf.student_profile,name = "faculty_student_profile"),
     #Enlist student web pages
     path("student/profile",vs.homepage,name="student_profile"),

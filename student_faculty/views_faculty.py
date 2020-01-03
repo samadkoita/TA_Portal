@@ -126,7 +126,7 @@ def editCourse(request,cn,sem,ye):
     try:
         course = models.Course.objects.get(course_name = cn, semester = sem, year = ye, profs = faculty_object)
     except:
-        return HttpResponse("Error - > No such Course" + cn+" "+ sem + " " + ye)
+        return render(request,'error_faculty.html',{'fac':faculty_object ,'error':"Please enter a valid course URL/You are not a course professor for "+ cn +" "+sem+" "+ye+". Please ask the course professor to add you as one."})
     if request.method == "POST":
         form = forms_faculty.PostForm_NewCouse(request.POST,instance = course)
         if form.is_valid():
@@ -134,10 +134,10 @@ def editCourse(request,cn,sem,ye):
             post.author = request.user
             post.published_date = timezone.now()
             post.save()
-            return redirect('faculty_home')
+            return redirect('faculty_applications',cn = cn,sem = sem,ye = ye)
     else:
         form = forms_faculty.PostForm_NewCouse(instance = course)
-    
+    return render(request,'addcourse.html',{form:'form'})
 
 def student_profile(request,cn,sem,ye,ldap_stud):
     if not request.user.is_authenticated:

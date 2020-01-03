@@ -4,6 +4,7 @@ from login.views import LoginViewSet,login_view
 from django.views.generic import TemplateView
 
 urlpatterns = [
+    path('',login_view,name = "home2"),
     path('home',login_view,name = "home"),
     path('login', LoginViewSet.as_view({'get': 'login'})),
     path('pass-login', LoginViewSet.as_view({'get': 'pass_login'})),
