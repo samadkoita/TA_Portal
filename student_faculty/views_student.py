@@ -13,6 +13,15 @@ class CourseList(ListView):
 	template_name="course_list.html"
 	model=Course
 	queryset=Course.objects.filter(deadline__gte=datetime.date.today())
+	def get(self,request,*args,**kwargs):
+		if not request.user.is_authenticated:
+			return redirect('home')
+		try:
+			student_object = models.StudentUser.objects.get(user=request.user)
+		except:
+			return HttpResponse("Error-> No such student")
+
+		return super(CourseList,self).get(request,*args,**kwargs)
 
 	
 class ApplicationList(ListView):
@@ -20,7 +29,8 @@ class ApplicationList(ListView):
 	model=Application
 	queryset=Application.objects.none()
 	def get(self,request,*args,**kwargs):
-
+		if not request.user.is_authenticated:
+			return redirect('home')
 		try:
 			student_object = models.StudentUser.objects.get(user=request.user)
 		except:
@@ -37,7 +47,7 @@ def editdetails(request):
     try:
         student_object = models.StudentUser.objects.get(user = request.user)
     except:
-        return HttpResponse("Error")
+        return HttpResponse("Error-> No such student")
 
     if request.method == "POST":
         form = forms_student.PostForm_EditDetails(request.POST,instance=student_object)
@@ -68,17 +78,21 @@ def applications(request,cn,sem,ye):
     student_object = ""
     try:
         student_object = models.StudentUser.objects.get(user = request.user)
+        if student_object.cpi==None or student_object.year_of_study==None:
+            return redirect('student_profile')
     except:
         return HttpResponse("Error")
     course = ""
     try:
         course = models.Course.objects.get(course_name = cn,semester = sem,year = ye)
     except:
-        return HttpResponse("Error")
+        return render(request,'error_student.html',{"error":"No such Course Code"})
     if course.deadline<datetime.date.today():
-        return HttpResponse("Error. You are late!")
+        return render(request,'error_student.html',{"error":"The deadline for applications for this course is over."})
     try:
         application = models.Application.objects.get(student = student_object,course = course)
+        if application.status!="On Hold":
+            return render(request,'error_student.html',{"error":"The professor has made his decision regarding your application."})
         if request.method == "POST":
             form = forms_student.AddApplication(request.POST,instance = application)
             if form.is_valid():
