@@ -31,7 +31,7 @@ class LoginViewSet(viewsets.ViewSet):
             return Response({"message": "{?code} is required"}, status=400)
 
         # Check we have redir param
-        redir = 'http://127.0.0.1:8000/login'
+        redir = request.META['HTTP_HOST']+'login'
         print('redir', redir)
         if redir is None:
             return Response({"message": "{?redir} is required"}, status=400)

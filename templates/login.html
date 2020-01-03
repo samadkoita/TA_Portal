@@ -8,7 +8,7 @@
 
 <div class = "container" style = 'text-align:center'>
    <h2>Teaching Assistants Selection Portal</h2>
-   <a href = "https://gymkhana.iitb.ac.in/sso/oauth/authorize/?client_id=z3E7yusTYcwJVy1o3AsFVro2EC18ntwAnBEIJLM4&response_type=code&scope=basic%20profile%20ldap%20sex%20phone%20insti_address%20program%20secondary_emails%20send_mail&redirect_uri=http://127.0.0.1:8000/login" role="button" class="btn btn-primary">Login using SSO
+   <a href = "https://gymkhana.iitb.ac.in/sso/oauth/authorize/?client_id=z3E7yusTYcwJVy1o3AsFVro2EC18ntwAnBEIJLM4&response_type=code&scope=basic%20profile%20ldap%20sex%20phone%20insti_address%20program%20secondary_emails%20send_mail&redirect_uri={{ request.META.HTTP_HOST }}/login" role="button" class="btn btn-primary">Login using SSO
 </a>
 </div>
 </html>
