@@ -97,3 +97,17 @@ class LoginViewSet(viewsets.ViewSet):
         })
 
 '''
+from django.http import HttpResponse,HttpRequest
+def login_view(request):
+    if request.user.is_authenticated:
+        try:
+            faculty_object = FacultyUser.objects.get(user = request.user)
+            return redirect('faculty_home')
+        except FacultyUser.DoesNotExist:
+            try:
+                student_object=StudentUser.objects.get(user=request.user)
+                return redirect('student_profile')
+            except StudentUser.DoesNotExist:
+                return HttpResponse("Some serious error")
+    return render(request,'login.html',{})
+

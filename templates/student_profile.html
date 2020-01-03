@@ -70,10 +70,10 @@ Profile of {{ student.name }} for {{ course.course_name }} - {{ course.get_semes
     <tbody>
     <tr>
         <th scope="row">Course Grade</th>
-        <td>{{ application.grade }}</td>
+        <td>{{ application.get_grade_display }}</td>
     </tr>
     <tr>
-        <th scope="row">Answer to the question:{{ course.extra_questions }}</th>
+        <th scope="row">Answer to the question:<br>{{ course.extra_questions }}</th>
           <td>{{ application.answers_to_questions }}</td>
         </tr>
     <tr>
