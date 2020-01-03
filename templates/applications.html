@@ -82,12 +82,12 @@
 <a href = "mailto:{{ rejected }}?subject=Letter of Rejection as a teaching assistant for {{ course.course_name }}" role="button?" class="btn btn-primary">Send emails to Rejected</a>
 </p>
 {% endif %}
-{% if hold != "" %}
+{% if waitlist != "" %}
 <p>
 <a href = "mailto:{{ hold }}" role="button" class="btn btn-primary">Send emails to Waitlisted</a>
 </p>
 {% endif %}
-{% if waitlist != "" %}
+{% if hold != "" %}
 <p>
 <a href = "mailto:{{ waitlist }}?subject=Waitlisted as a teaching assistant for {{ course.course_name }}" role="button" class="btn btn-primary">Send emails to those on hold
 </a>
