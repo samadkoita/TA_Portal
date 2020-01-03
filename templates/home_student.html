@@ -59,7 +59,7 @@
         
     </tbody>
   </table>
-{% if not student.cpi %}
+{% if not student.cpi or not student.year_of_study %}
 <h6 style="color:red">Enter your CPI and Year of Study by clicking on Edit Academic Details button</H6>
   <br>
 <h5 style="color:red">Warning! Not doing so will not let you apply for any course</H5>

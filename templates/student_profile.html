@@ -49,7 +49,7 @@ Profile of {{ student.name }} for {{ course.course_name }} - {{ course.get_semes
   </tr>
     <tr>
         <th scope="row">Department</th>
-        <td>{{ student.department_name }}</td>
+        <td>{{ student.get_department_display }}</td>
     </tr>
     <tr>
         <th scope="row">CPI</th>
@@ -64,7 +64,7 @@ Profile of {{ student.name }} for {{ course.course_name }} - {{ course.get_semes
     </tbody>
   </table>
 
-<div class = "container">
+<div class = "container" style = "text-align:center" >
   <p>Answers to the questions:</p>
   <table class="table table-striped">
     <tbody>
