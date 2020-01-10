@@ -22,7 +22,12 @@
 <div class = "container" style = "text-align:center">
 </div>
 <div class ="container">
-<p><h3>Applications for {{ course.course_name }}</h3></p>
+<p><h3>{{course.course_name }}-{{ course.get_semester_display }} {{course.year}}</h3></p>
+<p>  
+  <a href = "{% url 'faculty_addprof' course.course_name course.semester course.year %}" role="button?" class="btn btn-primary">Add professors</a>
+  <t><a href = "{% url 'faculty_editCourse' course.course_name course.semester course.year %}" role="button?" class="btn btn-primary">Edit Course</a>
+
+  </p>
 
 <table id="example" class="table table-striped table-bordered" style="width:100%">
   <thead>
@@ -74,7 +79,7 @@
 <div class="container" style = "text-align:center">
   {% if accepted != "" %}
   <p>
-  <a href = "mailto:{{ accepted }}?subject=Letter of Rejection as a teaching assistant for {{ course.course_name }}" role="button" class="btn btn-primary">Send emails to Accepted</a>
+  <a href = "mailto:{{ accepted }}?subject=Letter of Acception as a teaching assistant for {{ course.course_name }}" role="button" class="btn btn-primary">Send emails to Accepted</a>
 </p>
 {% endif %}
 {% if rejected != "" %}
@@ -84,12 +89,12 @@
 {% endif %}
 {% if waitlist != "" %}
 <p>
-<a href = "mailto:{{ hold }}" role="button" class="btn btn-primary">Send emails to Waitlisted</a>
+<a href = "mailto:{{ waitlist }}?subject=Waitlisted as a teaching assistant for {{ course.course_name }}" role="button" class="btn btn-primary">Send emails to Waitlisted</a>
 </p>
 {% endif %}
 {% if hold != "" %}
 <p>
-<a href = "mailto:{{ waitlist }}?subject=Waitlisted as a teaching assistant for {{ course.course_name }}" role="button" class="btn btn-primary">Send emails to those on hold
+<a href = "mailto:{{ hold }}?subject=On hold as a teaching assistant for {{ course.course_name }}" role="button" class="btn btn-primary">Send emails to those on hold
 </a>
 </p>
 {% endif %}

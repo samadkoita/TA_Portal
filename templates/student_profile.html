@@ -11,8 +11,8 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
-      <a class="nav-item nav-link active" href="{% url 'student_profile' %}">Home<span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link" href="{% url 'edit_details' %}">Edit My Details</a>
+      <a class="nav-item nav-link active" href="{% url 'faculty_home' %}">Home<span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" href="{% url 'faculty_addcourse' %}">Add a Course</a>
       <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a> 
     </div>
   </div>
@@ -49,7 +49,7 @@ Profile of {{ student.name }} for {{ course.course_name }} - {{ course.get_semes
   </tr>
     <tr>
         <th scope="row">Department</th>
-        <td>{{ student.get_department_display }}</td>
+        <td>{{ student.department_name }}</td>
     </tr>
     <tr>
         <th scope="row">CPI</th>
@@ -72,16 +72,38 @@ Profile of {{ student.name }} for {{ course.course_name }} - {{ course.get_semes
         <th scope="row">Course Grade</th>
         <td>{{ application.get_grade_display }}</td>
     </tr>
-    <tr>
-        <th scope="row">Answer to the question:<br>{{ course.extra_questions }}</th>
-          <td>{{ application.answers_to_questions }}</td>
-        </tr>
-    <tr>
-
-    
-        
+      {% if course.question1 %}
+      <tr>
+          <th scope="row">{{ course.question1 }}</th>
+            <td>{{ application.answer1 }}</td>
+          </tr>
+        {% endif %}
+            {% if course.question2 %}
+            <tr>
+          <th scope="row">{{ course.question2 }}</th>
+            <td>{{ application.answer2 }}</td>
+          </tr>
+            {% endif %}
+  
+            {% if course.question3 %}
+            <tr>
+          <th scope="row">{{ course.question3 }}</th>
+            <td>{{ application.answer3 }}</td>
+          </tr>
+             {% endif %}
+            {% if course.question4 %}
+      <tr>
+          <th scope="row">{{ course.question4 }}</th>
+            <td>{{ application.answer4 }}</td>
+          </tr>
+             {% endif %}
+              {% if course.question5 %}
+            <tr>
+          <th scope="row">{{ course.question5 }}</th>
+            <td>{{ application.answer5 }}</td>
+          </tr>
+              {% endif %}  
     </tbody>
-
   </table>
 </div>
 

@@ -1,11 +1,43 @@
 <html>
-<title>TA Selection Portal - Student-Application</title>
+<title>TA Selection Portal - Faculty-Add Professors</title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{% url 'faculty_home' %}">TA-Portal Faculty Page</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link" href="{% url 'faculty_home' %}">Home</a>
+      <a class="nav-item nav-link" href="{% url 'faculty_addcourse' %}">Add a Course</a>
+      <a class="nav-item nav-link" href="{%url 'logout' %}">Logout</a> 
+    </div>
+  </div>
+</nav>
 {% load widget_tweaks %}
 <div class = "container">
+  Professors for {{course.course_name }} - {{course.get_semester_display }} - {{ course.year }}
+  <div style = "text-align: center;">
+  <table class="table" style = "text-align:center">
+    <thead>
+      <tr>
+        <th scope="col">Professors</th>
+      </tr>
+    </thead>
+    {% for prof in course.profs.all %}
+    <tbody>
+  
+  <tr>
+  <td>{{ prof.ldap_id }}</td>
+  </tr>
+  {% endfor %}  
+</tbody>
+  </table>
+</div>
+
 <form method="post" novalidate>
   {% csrf_token %}
 
@@ -33,6 +65,7 @@
               {{ error }}
             </div>
           {% endfor %}
+
         {% else %}
           {% render_field field class="form-control is-valid" %}
         {% endif %}
@@ -45,8 +78,16 @@
       {% endif %}
     </div>
   {% endfor %}
-  
 
   <button type="submit" class="btn btn-primary">Submit</button>
+
+ 
 </form>
+{% if err != empty %}
+          <div style="color:red">
+            {{ err }}
+          </div>
+          {% endif %}
+
+          <a href = "{% url 'faculty_applications' course.course_name course.semester course.year %}" role="button?" class="btn btn-primary">Back to Course Page</a>
 </div>
