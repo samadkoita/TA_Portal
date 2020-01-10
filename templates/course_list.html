@@ -29,6 +29,7 @@
       <th scope="col">Details</th>
       <th scope="col">Prerequisites</th>
       <th scope="col">Deadline</th>
+      <th scope="col">Course Professors</th>
       <th scope="col"></th>
     </tr>
   </thead>
@@ -41,6 +42,12 @@
 <td>{{ course.course_details }}</td>
 <td>{{ course.eligibility_criteria }}</td>
 <td>{{ course.deadline }}</td>
+<td>
+{% for prof in course.profs.all %}
+    {{ prof.user.first_name }} {{ prof.user.last_name }}<br>
+  
+  {% endfor %}
+</td>
 <td><a href="{% url 'student_application' course.course_name course.semester course.year %}">Apply</a></td>
 </tr>
 {% endfor %}

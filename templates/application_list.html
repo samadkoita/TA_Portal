@@ -27,6 +27,7 @@
     <tr>
       <th scope="col">#</th>
       <th scope="col">Course Name</th>
+      <th scope="col">Course Professors</th>
       <th scope="col">Status</th>
       <th scope="col">Waitlist Number</th>
       <th scope="col">Deadline</th>
@@ -38,7 +39,12 @@
 
 <tr>
 <th scope="row">{{ forloop.counter }}</th>
-<td>{{ application.course.course_name }}</td>
+<td>{{ application.course.course_name }} - {{ application.course.get_semester_display }} {{ application.course.year }} </td>
+<td>
+{% for prof in application.course.profs.all %}
+    {{ prof.user.first_name }} {{ prof.user.last_name }}<br>
+  {% endfor %}
+</td>
 <td>{{ application.get_status_display }}</td>
 <td>{{ application.waitlist_num }}</td>
 <td>{{ application.course.deadline }}</td>

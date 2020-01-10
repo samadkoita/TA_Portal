@@ -104,6 +104,11 @@ class Application(models.Model):
 	# to be used only is status is waitlist
 	waitlist_num=models.IntegerField(('Waitlist Number'),blank=True,null=True)
 	created_or_modified=models.DateTimeField(('Last Modified'),auto_now=True)
+	def save(self,*args,**kwargs):
+		if self.status!="Waitlist":
+			self.waitlist_num=None
+		super(Application,self).save(*args,**kwargs)
+
 
 #This will store the 
 class StudentFeedback(models.Model):
