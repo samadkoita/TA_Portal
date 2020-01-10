@@ -35,7 +35,7 @@ class ApplicationList(ListView):
 			student_object = models.StudentUser.objects.get(user=request.user)
 		except:
 			return HttpResponse("Error-> No such student")
-		self.queryset=Application.objects.filter(course__deadline__gte=datetime.date.today(),student = student_object)
+		self.queryset=Application.objects.filter(student = student_object)
 		return super(ApplicationList,self).get(request,*args,**kwargs)
 
 #Done By Karan
@@ -105,11 +105,33 @@ def applications(request,cn,sem,ye):
                 return redirect('course_list')
         else:
             form = forms_student.AddApplication(instance = application)
-            form.fields['answers_to_questions'].label = course.extra_questions
-            return render(request, 'student_application.html', {'form': form,'course':course})
+            
+            form = forms_student.AddApplication(instance=application)
+            try:
+                form.fields['answer1'].label = course.question1
+            except:
+                print("B1")
+            try:
+                form.fields['answer2'].label = course.question2
+            except:
+                print("B2")
+            try:
+                form.fields['answer3'].label = course.question3
+            except:
+                print("B3")
+            try:
+                form.fields['answer4'].label = course.question4
+            except:
+                print("B4")
+            try:
+                form.fields['answer5'].label = course.question5
+            except:
+                print("B5")
+
+        return render(request, 'student_application_edit.html', {'form': form,'course':course})
 
 
-    except:
+    except Application.DoesNotExist:
         application=Application(course=course,student=student_object)
         if request.method == "POST":
             form = forms_student.AddApplication(request.POST,instance=application)
@@ -123,7 +145,56 @@ def applications(request,cn,sem,ye):
                 return redirect('course_list')
         else:
             form = forms_student.AddApplication(instance=application)
-            form.fields['answers_to_questions'].label = course.extra_questions
-            print("B3")
+            try:
+                form.fields['answer1'].label = course.question1
+            except:
+                print("B1")
+            try:
+                form.fields['answer2'].label = course.question2
+            except:
+                print("B2")
+            try:
+                form.fields['answer3'].label = course.question3
+            except:
+                print("B3")
+            try:
+                form.fields['answer4'].label = course.question4
+            except:
+                print("B4")
+            try:
+                form.fields['answer5'].label = course.question5
+            except:
+                print("B5")
 
         return render(request, 'student_application.html', {'form': form,'course':course})
+
+
+
+
+def delete_applicant(request,cn,sem,ye):
+    if not request.user.is_authenticated:
+        return redirect('home')
+    student_object = ""
+    try:
+        student_object = models.StudentUser.objects.get(user = request.user)
+        if student_object.cpi==None or student_object.year_of_study==None:
+            return redirect('student_profile')
+    except:
+        return HttpResponse("Error")
+    course = ""
+    try:
+        course = models.Course.objects.get(course_name = cn,semester = sem,year = ye)
+    except:
+        return render(request,'error_student.html',{"error":"No such Course Code"})
+    if course.deadline<datetime.date.today():
+        return render(request,'error_student.html',{"error":"The deadline for applications for this course is over."})
+    try:
+        application = models.Application.objects.get(student = student_object,course = course)
+        application.delete()
+
+    except:
+        return render(request,'error_student.html',{"error":"No such Application"})
+
+    
+    
+    return redirect('application_list')

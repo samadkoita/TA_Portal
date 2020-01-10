@@ -31,6 +31,7 @@ class LoginViewSet(viewsets.ViewSet):
             return Response({"message": "{?code} is required"}, status=400)
 
         # Check we have redir param
+        # Change done by KARAN
         redir = request.META['HTTP_HOST']+'/login'
         print('redir', redir)
         if redir is None:

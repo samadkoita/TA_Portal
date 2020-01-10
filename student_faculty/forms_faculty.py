@@ -6,7 +6,7 @@ class PostForm_NewCouse(forms.ModelForm):
 
     class Meta:
         model = Course
-        fields = ('course_name','course_details','profs','eligibility_criteria','department','deadline','duration','extra_questions','year','semester')
+        fields = ('course_name','course_details','eligibility_criteria','department','deadline','duration','question1','question2','question3','question4','question5','year','semester')
         '''
         course_name=models.CharField(('Course Name'),max_length=40)
 	    profs=models.ManyToManyField(FacultyUser)
@@ -26,3 +26,11 @@ class Application(forms.ModelForm):
     class Meta:
         model = Application
         fields = ['status','waitlist_num']
+
+
+class AddProf(forms.Form):
+    ldap_id = forms.CharField(label='LDAP ID', max_length=100,required = True)
+        
+
+
+

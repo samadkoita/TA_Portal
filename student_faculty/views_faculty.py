@@ -49,6 +49,7 @@ def addcourse(request):
         if form.is_valid():
             post = form.save()
             post.author = request.user
+            post.profs.add(faculty_object)
             post.published_date = timezone.now()
             post.save()
             return redirect('faculty_home')
@@ -113,32 +114,6 @@ def ListApplicants(request,cn,sem,ye):
 
 
 
-    
-def editCourse(request,cn,sem,ye):
-    if not request.user.is_authenticated:
-        return redirect('home')
-    faculty_object = ""
-    try:
-        faculty_object = models.FacultyUser.objects.get(user = request.user)
-    except:
-        return render(request,'error_authentication.html',{'error':"You must be a faculty to access this page"})
-    course = ""
-    try:
-        course = models.Course.objects.get(course_name = cn, semester = sem, year = ye, profs = faculty_object)
-    except:
-        return render(request,'error_faculty.html',{'fac':faculty_object ,'error':"Please enter a valid course URL/You are not a course professor for "+ cn +" "+sem+" "+ye+". Please ask the course professor to add you as one."})
-    if request.method == "POST":
-        form = forms_faculty.PostForm_NewCouse(request.POST,instance = course)
-        if form.is_valid():
-            post = form.save()
-            post.author = request.user
-            post.published_date = timezone.now()
-            post.save()
-            return redirect('faculty_applications',cn = cn,sem = sem,ye = ye)
-    else:
-        form = forms_faculty.PostForm_NewCouse(instance = course)
-    return render(request,'addcourse.html',{form:'form'})
-
 def student_profile(request,cn,sem,ye,ldap_stud):
     if not request.user.is_authenticated:
         return redirect('home')
@@ -181,3 +156,104 @@ def student_profile(request,cn,sem,ye,ldap_stud):
 
     
     return render(request,'student_profile.html',{'student':student_object,'course':course,'application':application,'form':form})
+
+def addprof(request,cn,sem,ye):
+    empty =""
+    err = ""
+    if not request.user.is_authenticated:
+        return redirect('home')
+    faculty_object = ""
+    try:
+        faculty_object = models.FacultyUser.objects.get(user = request.user)
+    except:
+        return render(request,'error_authentication.html',{'error':"You must be a faculty to access this page"})
+
+    course = ""
+    try:
+        course = models.Course.objects.get(course_name = cn, semester = sem, year = ye, profs = faculty_object)
+    except:
+        return render(request,'error_faculty.html',{'fac':faculty_object ,'error':"Please enter a valid course URL/You are not a course professor for "+ cn +" "+sem+" "+ye+". Please ask the course professor to add you as one."})
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = forms_faculty.AddProf(request.POST)
+        
+        # check whether it's valid:
+        if form.is_valid():
+            ldap = form.cleaned_data['ldap_id']
+            try:
+                prof_object = models.FacultyUser.objects.get(ldap_id = ldap)
+            except Exception as e:
+                err = "Invalid LDAP ID"
+                return render(request, 'addprof.html', {'form': form,'err':err,'empty':empty,'course':course})
+            try:
+                course_match = models.Course.objects.get(course_name = cn, semester = sem, year = ye, profs = prof_object)
+                err = "The same prof is already enrolled"
+                return render(request, 'addprof.html', {'form': form,'err':err,'empty':empty,'course':course})
+            except:
+                course.profs.add(prof_object)
+                course.save()
+                return redirect('faculty_addprof',cn = cn,sem = sem,ye =ye)
+                
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = forms_faculty.AddProf()
+
+    return render(request, 'addprof.html', {'form': form,'err':err,'empty':empty,'course':course})
+
+
+
+def editcourse(request,cn,sem,ye):
+    if not request.user.is_authenticated:
+        return redirect('home')
+    faculty_object = ""
+    try:
+        faculty_object = models.FacultyUser.objects.get(user = request.user)
+    except:
+        return render(request,'error_authentication.html',{'error':"You must be a faculty to access this page"})
+
+    course = ""
+    try:
+        course = models.Course.objects.get(course_name = cn, semester = sem, year = ye, profs = faculty_object)
+    except:
+        return render(request,'error_faculty.html',{'fac':faculty_object ,'error':"Please enter a valid course URL/You are not a course professor for "+ cn +" "+sem+" "+ye+". Please ask the course professor to add you as one."})
+    
+    if request.method == "POST":
+        form = forms_faculty.PostForm_NewCouse(request.POST,instance = course)
+        if form.is_valid():
+            post = form.save()
+            post.author = request.user
+            post.published_date = timezone.now()
+            post.save()
+            return redirect('faculty_applications',cn = cn,sem = sem,ye =ye)
+
+
+    else:
+        form = forms_faculty.PostForm_NewCouse(instance=course)
+    return render(request, 'editcourse.html', {'form': form,'course':course})
+
+
+
+
+def delete_course(request,cn,sem,ye):
+    if not request.user.is_authenticated:
+        return redirect('home')
+    faculty_object = ""
+    try:
+        faculty_object = models.FacultyUser.objects.get(user = request.user)
+    except:
+        return render(request,'error_authentication.html',{'error':"You must be a faculty to access this page"})
+
+    course = ""
+    try:
+        course = models.Course.objects.get(course_name = cn, semester = sem, year = ye, profs = faculty_object)
+    except:
+        return render(request,'error_faculty.html',{'fac':faculty_object ,'error':"Please enter a valid course URL/You are not a course professor for "+ cn +" "+sem+" "+ye+". Please ask the course professor to add you as one."})
+    
+    course.delete()
+    return redirect('faculty_home')
+    
+    

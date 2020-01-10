@@ -5,4 +5,5 @@ STUDENT_STATUS=(('Accepted','Accepted'),('Waitlist','Waitlist'),('Rejected','Rej
 RATINGS=((1,'1'),(2,'2'),(3,'3'),(4,'4'),(5,'5'))
 SEM_OPTIONS=((1,'Autumn'),(2,'Spring'),(3,'Summer'))
 GRADE=((11,"AP"),(10,"AA"),(9,"AB"),(8,"BB"),(7,"BC"),(6,"CC"),(5,"CD"),(4,"DD"),(0,"FR"))
+YEAR=((1,'1'),(2,'2'),(3,'3'),(4,'4'),(5,'5'))
 #ADD summer semester
